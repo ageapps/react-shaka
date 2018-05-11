@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import shaka from 'shaka-player';
 import './MainVideoPlayer.css';
 
-var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-
-// let manifestUri = this.props.manifestUri;
-// let manifestUri = require('../../../../Uni/IRAC/DASH/video/outputtest_dash.mpd');
+// var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 
 class MainVideoPlayer extends Component {
   componentDidMount() {
@@ -31,7 +28,7 @@ class MainVideoPlayer extends Component {
     // Try to load a manifest.
     // This is an asynchronous process.
     player
-      .load(manifestUri)
+      .load(this.props.manifestUri)
       .then(function() {
         // This runs if the asynchronous load is successful.
         console.log('The video has now been loaded!');
@@ -61,9 +58,8 @@ class MainVideoPlayer extends Component {
         <video
           ref="video"
           width="640"
-          poster="//shaka-player-demo.appspot.com/assets/poster.jpg"
           controls
-          autoPlay
+          // autoPlay
         />
       </div>
     );
