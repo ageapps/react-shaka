@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import shaka from 'shaka-player';
-import './MainVideoPlayer.css';
+import styles from'./MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 
@@ -53,7 +53,7 @@ class MainVideoPlayer extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className={styles.container}>
         <h2>Player</h2>
         <video
           ref="video"

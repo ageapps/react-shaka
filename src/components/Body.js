@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MainVideoPlayer from './MainVideoPlayer';
 import VideoList from './VideoList';
 
-import './Body.css';
+import styles from './Body.css';
 
 let manifests = ['//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd'];
 
@@ -22,9 +22,9 @@ class Body extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className={styles.container}>
         <MainVideoPlayer manifestUri={manifests[this.state.activeVideo]} />
-        <VideoList _handleVideoSelection={_this._handleVideoSelection} manifests={manifests} />
+        <VideoList _handleVideoSelection={this._handleVideoSelection} manifests={manifests} />
       </div>
     );
   }
