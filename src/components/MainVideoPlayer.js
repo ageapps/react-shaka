@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
 import shaka from 'shaka-player';
-import styles from'./MainVideoPlayer.css';
+import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 
 class MainVideoPlayer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      trackInfo: {
+        width: 0,
+        height: 0,
+        bitrate: 0
+      }
+    };
+  }
+
   componentDidMount() {
+    // Fill in the language preferences based on browser config, if available.
+    let language = navigator.language || 'en-us';
+
     // Install built-in polyfills to patch browser incompatibilities.
     shaka.polyfill.installAll();
 
@@ -29,7 +43,34 @@ class MainVideoPlayer extends Component {
     // This is an asynchronous process.
     player
       .load(this.props.manifestUri)
-      .then(function() {
+      .then(() => {
+        var tracks = player.getVariantTracks();
+        var activeTrack;
+
+        // Add track info to the DOM.
+        for (var i = 0; i < tracks.length; ++i) {
+          var track = tracks[i];
+          if (track.active) activeTrack = track;
+          this.setState({
+            trackInfo: {
+              width: track.width,
+              height: track.height,
+              bitrate: (track.bandwidth / 1024).toFixed(0)
+            }
+          });
+
+          // var li = document.createElement('li');
+          // li.textContent = text;
+          // ul.appendChild(li);
+        }
+
+        // Correct aspect ratio.
+        if (activeTrack) {
+          var aspectRatio = activeTrack.width / activeTrack.height;
+          this.ref.video.width = this.ref.video.height * aspectRatio;
+        } else {
+          console.error('Unable to query aspect ratio!');
+        }
         // This runs if the asynchronous load is successful.
         console.log('The video has now been loaded!');
       })
@@ -61,6 +102,14 @@ class MainVideoPlayer extends Component {
           controls
           // autoPlay
         />
+        <div>
+          <ul>
+            <li>
+              Resolution: {this.state.trackInfo.width}x{this.state.trackInfo.height}
+            </li>
+            <li>Bitrate: {this.state.trackInfo.bitrate} kbps</li>
+          </ul>
+        </div>
       </div>
     );
   }
