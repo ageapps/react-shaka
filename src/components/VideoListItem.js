@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import './VideoListItem.css';
+import styles from './VideoListItem.css';
 
 class VideoListItem extends Component {
   render() {
     return (
-      <div className="VideoListItem">
-        
+      <div className={styles.container}>
+        {this.props.video.title}
       </div>
     );
   }

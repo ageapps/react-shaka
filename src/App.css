@@ -1,6 +1,8 @@
 .App {
   text-align: center;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -10,11 +12,8 @@
 
 .header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
   color: white;
 }
-
 .title {
   font-size: 1.5em;
 }

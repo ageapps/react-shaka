@@ -4,27 +4,49 @@ import VideoList from './VideoList';
 
 import styles from './Body.css';
 
-let manifests = ['//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd'];
+const videos = [
+  // {
+  //   caption: '',
+  //   mpd: '',
+  //   title: '',
+  //   description: ''
+  // },
+  {
+    id: 0,
+    caption: 'https://www.petdarling.com/articulos/como-eliminar-el-olor-a-pis-de-gato/',
+    mpd: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+    title: '',
+    description: 'Video 0 Description'
+  },
+  {
+    id: 1,
+    caption: 'https://www.petdarling.com/articulos/como-eliminar-el-olor-a-pis-de-gato/',
+    mpd: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+    title: 'Video 1',
+    description: 'Video 1 Description'
+  },
+  
+];
 
 class Body extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeVideo: '0'
+      activeVideoId: videos[0].id
     };
   }
 
   _handleVideoSelection = (id) => {
     this.setState({
-      activeVideo: id,
-    })
+      activeVideoId: id,
+    });
   }
-
+  
   render() {
     return (
       <div className={styles.container}>
-        <MainVideoPlayer manifestUri={manifests[this.state.activeVideo]} />
-        <VideoList _handleVideoSelection={this._handleVideoSelection} manifests={manifests} />
+        <MainVideoPlayer currentVideo={videos[this.state.activeVideoId]} />
+        <VideoList _handleVideoSelection={this._handleVideoSelection} currentVideo={this.state.activeVideoId} videos={videos} />
       </div>
     );
   }

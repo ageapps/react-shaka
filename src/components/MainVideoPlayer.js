@@ -3,10 +3,12 @@ import shaka from 'shaka-player';
 import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
+let mainVideo;
 
 class MainVideoPlayer extends Component {
-  constructor(props) {
+  constructor(props){
     super(props);
+    mainVideo = props.currentVideo;
     this.state = {
       trackInfo: {
         width: 0,
@@ -15,7 +17,6 @@ class MainVideoPlayer extends Component {
       }
     };
   }
-
   componentDidMount() {
     // Fill in the language preferences based on browser config, if available.
     let language = navigator.language || 'en-us';
@@ -42,7 +43,7 @@ class MainVideoPlayer extends Component {
     // Try to load a manifest.
     // This is an asynchronous process.
     player
-      .load(this.props.manifestUri)
+      .load(mainVideo.mpd)
       .then(() => {
         var tracks = player.getVariantTracks();
         var activeTrack;
