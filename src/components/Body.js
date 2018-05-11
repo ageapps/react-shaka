@@ -7,8 +7,7 @@ import styles from './Body.css';
 class Body extends Component {
   render() {
     return (
-      // <div className={styles.container}>
-      <div style={{display: 'flex',  height: '100%'}}>
+      <div className={styles.container}>
         <MainVideoPlayer/>
         <VideoList/>
       </div>
