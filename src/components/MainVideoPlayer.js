@@ -9,8 +9,9 @@ let player;
 class MainVideoPlayer extends Component {
   constructor(props) {
     super(props);
+    this.trackSelectorRef = React.createRef();
+    this.audioSelectorRef = React.createRef();
 
-    console.log(mainVideo);
     this.state = {
       trackInfo: {
         width: 0,
@@ -25,7 +26,7 @@ class MainVideoPlayer extends Component {
         audioBandwidth: ''
       },
       audios: [],
-      texts: []
+      tracks: []
     };
   }
 
@@ -68,11 +69,11 @@ class MainVideoPlayer extends Component {
       .then(() => {
         this._getTrackInfo(player);
         let audios = player.getAudioLanguages();
-        let texts = player.getTextLanguages();
+        let tracks = player.getVariantTracks();
 
         this.setState({
           audios: audios,
-          texts: texts
+          tracks: tracks
         });
 
         // This runs if the asynchronous load is successful.
@@ -104,8 +105,6 @@ class MainVideoPlayer extends Component {
     for (var i = 0; i < tracks.length; ++i) {
       var track = tracks[i];
       if (track.active) activeTrack = track;
-      console.log(track);
-      
     }
     this.setState({
       trackInfo: {
@@ -137,6 +136,13 @@ class MainVideoPlayer extends Component {
     player.unload();
   }
 
+  _handleConfig() {
+    // player.selectVariantTrack(this.state.tracks[this.ref.trackSelector.id]);
+    console.log(this.audioSelectorRef);
+    if(!player) return;
+    player.selectAudioLanguage('de');
+  }
+
   render() {
     let audioSelector = this.state.audios.map(item => (
       <option key={item} value={item}>
@@ -144,9 +150,9 @@ class MainVideoPlayer extends Component {
       </option>
     ));
 
-    let textSelector = this.state.texts.map(item => (
-      <option key={item} value={item}>
-        {item}
+    let trackSelector = this.state.tracks.map(item => (
+      <option key={item.id} value={item.id}>
+        Res: {item.width}x{item.height}, BW: {item.bandwidth}, Lang: {item.language}
       </option>
     ));
 
@@ -203,11 +209,17 @@ class MainVideoPlayer extends Component {
         </table>
 
         <div>
-          <select>{audioSelector}</select>
-        </div>
+          <h1>Track selection</h1>
 
-        <div>
-          <select>{textSelector}</select>
+          <div>
+            <select ref={this.audioSelectorRef}>{audioSelector}</select>
+          </div>
+
+          <div>
+            <select ref={this.trackSelectorRef}>{trackSelector}</select>
+          </div>
+
+          <button onClick={this._handleConfig}>Load track</button>
         </div>
       </div>
     );
