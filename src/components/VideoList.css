@@ -1,6 +1,7 @@
 .container {
   flex: 1;
   background: white;
+  padding: 10px;
 }
 .list{
   padding: 0;

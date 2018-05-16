@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import styles from './VideoListItem.css';
-
+import { Card, CardImg, CardText, CardBody,
+  CardTitle, CardSubtitle, Button } from 'reactstrap';
+  
 class VideoListItem extends Component {
   render() {
     return (
+      <Card>
       <div className={styles.container}>
         <img className={styles.image} src={this.props.video.caption} alt=''/>
         <div className={styles.description}>
@@ -15,6 +18,7 @@ class VideoListItem extends Component {
           </p>
         </div>
       </div>
+      </Card>
     );
   }
 }

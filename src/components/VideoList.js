@@ -9,7 +9,8 @@ class VideoList extends Component {
   constructor(props){
     super(props);
     currentVideo = props.currentVideo;
-    videos = props.videos.filter((video => video.id !== currentVideo));
+    // videos = props.videos.filter((video => video.id !== currentVideo));
+    videos = props.videos;
   }
 
   handleClick(id){

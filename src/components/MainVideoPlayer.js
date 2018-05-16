@@ -160,7 +160,7 @@ class MainVideoPlayer extends Component {
 
     return (
       <div className={styles.container}>
-        <h2>Player</h2>
+        <h2>{this.props.currentVideo.title}</h2>
         <video
           ref="video"
           width="640"
