@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import shaka from 'shaka-player';
+import { Button, Table } from 'reactstrap';
 import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
@@ -166,7 +167,7 @@ class MainVideoPlayer extends Component {
           controls
           // autoPlay
         />
-        <table>
+        <Table bordered condensed striped>
           <tbody>
             <tr>
               <td> Resolution </td>
@@ -207,15 +208,15 @@ class MainVideoPlayer extends Component {
               <td>{this.state.trackInfo.mimeType}</td>
             </tr>
           </tbody>
-        </table>
+        </Table>
 
         <div>
           <h1>Track selection</h1>
           <div>
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
           </div>
-
-          <button onClick={this._handleConfig.bind(this)}>Load track</button>
+          
+          <Button onClick={this._handleConfig.bind(this)}>Load track</Button>
         </div>
       </div>
     );
