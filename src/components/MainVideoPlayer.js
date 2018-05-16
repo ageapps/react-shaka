@@ -10,7 +10,6 @@ class MainVideoPlayer extends Component {
   constructor(props) {
     super(props);
     this.trackSelectorRef = React.createRef();
-    this.audioSelectorRef = React.createRef();
 
     this.state = {
       trackInfo: {
@@ -25,7 +24,6 @@ class MainVideoPlayer extends Component {
         audioCodec: '',
         audioBandwidth: ''
       },
-      audios: [],
       tracks: []
     };
   }
@@ -67,11 +65,9 @@ class MainVideoPlayer extends Component {
       .load(mpd)
       .then(() => {
         this._getTrackInfo(player);
-        let audios = player.getAudioLanguages();
         let tracks = player.getVariantTracks();
 
         this.setState({
-          audios: audios,
           tracks: tracks
         });
 
@@ -142,26 +138,19 @@ class MainVideoPlayer extends Component {
     var tracks = player.getVariantTracks();
     // var tracks = this.state.tracks;
 
-console.log(this.trackSelectorRef.current.value)
+    console.log(this.trackSelectorRef.current.value);
     // Add track info to the DOM.
     for (var i = 0; i < tracks.length; ++i) {
       var track = tracks[i];
-      if (track.id === this.trackSelectorRef.current.value) {
-        player.selectVariantTrack(track);
-        console.log(track);
+
+      if (track.id === parseInt(this.trackSelectorRef.current.value)) {
+        player.selectVariantTrack(track, true);
       }
     }
-    player.selectAudioLanguage(this.audioSelectorRef.current.value);
     this._getTrackInfo(player);
   }
 
   render() {
-    let audioSelector = this.state.audios.map(item => (
-      <option key={item} value={item}>
-        {item}
-      </option>
-    ));
-
     let trackSelector = this.state.tracks.map(item => (
       <option key={item.id} value={item.id}>
         Res: {item.width}x{item.height}, BW: {item.bandwidth}, Lang: {item.language}
@@ -214,7 +203,7 @@ console.log(this.trackSelectorRef.current.value)
               <td>{this.state.trackInfo.language}</td>
             </tr>
             <tr>
-              <td> Mime Type </td>
+              <td> MIME Type </td>
               <td>{this.state.trackInfo.mimeType}</td>
             </tr>
           </tbody>
@@ -222,11 +211,6 @@ console.log(this.trackSelectorRef.current.value)
 
         <div>
           <h1>Track selection</h1>
-
-          <div>
-            <select ref={this.audioSelectorRef}>{audioSelector}</select>
-          </div>
-
           <div>
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
           </div>
