@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import shaka from 'shaka-player';
-import { Button, Table } from 'reactstrap';
+import { Button, Table, FormGroup, Label, Input } from 'reactstrap';
 import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
@@ -212,10 +212,15 @@ class MainVideoPlayer extends Component {
 
         <div>
           <h1>Track selection</h1>
-          <div>
+          {/* <div>
+            <select ref={this.trackSelectorRef}>{trackSelector}</select>
+          </div> */}
+          <FormGroup>
+            <Label for="exampleSelect">Select</Label>
+            <div>
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
           </div>
-          
+          </FormGroup>
           <Button onClick={this._handleConfig.bind(this)}>Load track</Button>
         </div>
       </div>
