@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import shaka from 'shaka-player';
-import { Button, Table, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Table, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
@@ -25,6 +25,7 @@ class MainVideoPlayer extends Component {
         audioCodec: '',
         audioBandwidth: ''
       },
+      inputValue: '',
       tracks: []
     };
   }
@@ -150,6 +151,20 @@ class MainVideoPlayer extends Component {
     }
     this._getTrackInfo(player);
   }
+  handleChange = (e) => {
+    this.setState({
+      inputValue: e.target.value
+    })
+}
+  loadMPD(value){
+    console.log("Clicked " + value);
+    this.loadPlayer(value);
+  }
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.loadMPD(this.state.inputValue);
+  }
+
 
   render() {
     let trackSelector = this.state.tracks.map(item => (
@@ -170,6 +185,10 @@ class MainVideoPlayer extends Component {
 
         <div>
           <h1>Track selection</h1>
+          <InputGroup className={styles.input}>
+            <InputGroupAddon addonType="prepend"><Button onClick={(e) => this.onSubmit(e)}>Load</Button></InputGroupAddon>
+            <Input onChange={e => this.handleChange(e)}/>
+          </InputGroup>
           {/* <div>
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
           </div> */}
