@@ -167,6 +167,22 @@ class MainVideoPlayer extends Component {
           controls
           // autoPlay
         />
+
+        <div>
+          <h1>Track selection</h1>
+          {/* <div>
+            <select ref={this.trackSelectorRef}>{trackSelector}</select>
+          </div> */}
+          <FormGroup>
+            <Label for="exampleSelect">Select</Label>
+            <div>
+            <select ref={this.trackSelectorRef}>{trackSelector}</select>
+          </div>
+          </FormGroup>
+          <Button onClick={this._handleConfig.bind(this)}>Load track</Button>
+        </div>
+
+        <div className={styles.table}>
         <Table bordered condensed striped>
           <tbody>
             <tr>
@@ -209,19 +225,6 @@ class MainVideoPlayer extends Component {
             </tr>
           </tbody>
         </Table>
-
-        <div>
-          <h1>Track selection</h1>
-          {/* <div>
-            <select ref={this.trackSelectorRef}>{trackSelector}</select>
-          </div> */}
-          <FormGroup>
-            <Label for="exampleSelect">Select</Label>
-            <div>
-            <select ref={this.trackSelectorRef}>{trackSelector}</select>
-          </div>
-          </FormGroup>
-          <Button onClick={this._handleConfig.bind(this)}>Load track</Button>
         </div>
       </div>
     );
