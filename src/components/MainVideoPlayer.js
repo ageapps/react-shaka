@@ -38,7 +38,6 @@ class MainVideoPlayer extends Component {
 
   componentDidMount() {
     // Fill in the language preferences based on browser config, if available.
-
     // Install built-in polyfills to patch browser incompatibilities.
     shaka.polyfill.installAll();
 
@@ -138,9 +137,22 @@ class MainVideoPlayer extends Component {
 
   _handleConfig() {
     // player.selectVariantTrack(this.state.tracks[this.ref.trackSelector.id]);
-    console.log(this.audioSelectorRef);
-    if(!player) return;
-    player.selectAudioLanguage('de');
+    if (!player) return;
+
+    var tracks = player.getVariantTracks();
+    // var tracks = this.state.tracks;
+
+console.log(this.trackSelectorRef.current.value)
+    // Add track info to the DOM.
+    for (var i = 0; i < tracks.length; ++i) {
+      var track = tracks[i];
+      if (track.id === this.trackSelectorRef.current.value) {
+        player.selectVariantTrack(track);
+        console.log(track);
+      }
+    }
+    player.selectAudioLanguage(this.audioSelectorRef.current.value);
+    this._getTrackInfo(player);
   }
 
   render() {
@@ -219,7 +231,7 @@ class MainVideoPlayer extends Component {
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
           </div>
 
-          <button onClick={this._handleConfig}>Load track</button>
+          <button onClick={this._handleConfig.bind(this)}>Load track</button>
         </div>
       </div>
     );
