@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import VideoListItem from './VideoListItem';
-
 import styles from './VideoList.css';
 
 let videos;

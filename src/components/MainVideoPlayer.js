@@ -10,7 +10,6 @@ class MainVideoPlayer extends Component {
   constructor(props){
     super(props);
 
-    mainVideo = props.currentVideo;
     console.log(mainVideo);
     this.state = {
       trackInfo: {
@@ -20,9 +19,12 @@ class MainVideoPlayer extends Component {
       }
     };
   }
-  componentWillUpdate(nextProps, nextState){
-    // this.loadPlayer(nextProps.currentVideo.mpd);
-  }
+ 
+  componentDidUpdate(prevProps){
+    if (prevProps.currentVideo !== this.props.currentVideo) {
+        this.loadPlayer(this.props.currentVideo.mpd);
+    }
+}
 
   componentDidMount() {
     // Fill in the language preferences based on browser config, if available.
@@ -45,8 +47,10 @@ class MainVideoPlayer extends Component {
 
     // Listen for error events.
     player.addEventListener('error', this.onErrorEvent);
+    player.addEventListener('adaptation', this.onAdaptationEvent);
 
-    // this.loadPlayer(this.props.currentVideo.mpd);
+
+    this.loadPlayer(this.props.currentVideo.mpd);
 
   }
   loadPlayer(mpd) {
@@ -92,6 +96,11 @@ class MainVideoPlayer extends Component {
   onErrorEvent(event) {
     // Extract the shaka.util.Error object from the event.
     this.onError(event.detail);
+  }
+
+  onAdaptationEvent(event) {
+    // Extract the shaka.util.Error object from the event.
+    // this.onError(event.detail);
   }
 
   onError(error) {
