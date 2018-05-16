@@ -13,17 +13,17 @@ const videos = [
   // },
   {
     id: 0,
-    caption: 'https://www.petdarling.com/articulos/como-eliminar-el-olor-a-pis-de-gato/',
-    mpd: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
-    title: '',
-    description: 'Video 0 Description'
+    caption: 'http://www.catster.com/wp-content/uploads/2017/08/Hairless-cat.jpg',
+    mpd: 'http://localhost:8000/out/whooping3/manifest.mpd',
+    title: 'Hairless Cat',
+    description: 'Video 0, hearless cat'
   },
   {
     id: 1,
-    caption: 'https://www.petdarling.com/articulos/como-eliminar-el-olor-a-pis-de-gato/',
-    mpd: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
-    title: 'Video 1',
-    description: 'Video 1 Description'
+    caption: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_1cvH240d8UYYYJgY8d-Eh9BJZkr_EyqDAlkfjU05eikqXxdWg',
+    mpd: 'http://pihostadri.ddns.net:8888/final2/final2.mpd',
+    title: 'Angry Cat',
+    description: 'Video 1, angry cat'
   },
   
 ];
@@ -37,15 +37,17 @@ class Body extends Component {
   }
 
   _handleVideoSelection = (id) => {
-    this.setState({
+    console.log("Selected "+id);
+    this.setState((prevState, props) => ({
       activeVideoId: id,
-    });
+    }));
   }
   
   render() {
     return (
       <div className={styles.container}>
         <MainVideoPlayer currentVideo={videos[this.state.activeVideoId]} />
+        <p>{this.state.activeVideoId}</p>
         <VideoList _handleVideoSelection={this._handleVideoSelection} currentVideo={this.state.activeVideoId} videos={videos} />
       </div>
     );

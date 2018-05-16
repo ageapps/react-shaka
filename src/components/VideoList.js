@@ -9,20 +9,26 @@ let currentVideo;
 class VideoList extends Component {
   constructor(props){
     super(props);
+    currentVideo = props.currentVideo;
     videos = props.videos.filter((video => video.id !== currentVideo));
+  }
+
+  handleClick(id){
+    this.props._handleVideoSelection(id);
   }
   render() {
     
     const listItems = videos.map((item) => 
-        <VideoListItem key={item.id} video={item}/>
+        <div key={item.id} onClick={this.handleClick.bind(this,item.id)}>
+          <VideoListItem video={item} />
+        </div>
     );
 
     return (
       <div className={styles.container}>
-        <ul>{listItems}</ul>
+        <div className={styles.list} >{listItems}</div>
       </div>
     );
   }
 }
-
 export default VideoList;

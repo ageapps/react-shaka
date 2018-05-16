@@ -4,11 +4,14 @@ import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 let mainVideo;
+let player;
 
 class MainVideoPlayer extends Component {
   constructor(props){
     super(props);
+
     mainVideo = props.currentVideo;
+    console.log(mainVideo);
     this.state = {
       trackInfo: {
         width: 0,
@@ -17,6 +20,10 @@ class MainVideoPlayer extends Component {
       }
     };
   }
+  componentWillUpdate(nextProps, nextState){
+    // this.loadPlayer(nextProps.currentVideo.mpd);
+  }
+
   componentDidMount() {
     // Fill in the language preferences based on browser config, if available.
     let language = navigator.language || 'en-us';
@@ -33,17 +40,21 @@ class MainVideoPlayer extends Component {
       console.error('Browser not supported!');
     }
   }
-
   initPlayer() {
-    var player = new shaka.Player(this.refs.video);
+    player = new shaka.Player(this.refs.video);
 
     // Listen for error events.
     player.addEventListener('error', this.onErrorEvent);
 
+    // this.loadPlayer(this.props.currentVideo.mpd);
+
+  }
+  loadPlayer(mpd) {
+    if (!player) return
     // Try to load a manifest.
     // This is an asynchronous process.
     player
-      .load(mainVideo.mpd)
+      .load(mpd)
       .then(() => {
         var tracks = player.getVariantTracks();
         var activeTrack;
@@ -104,12 +115,10 @@ class MainVideoPlayer extends Component {
           // autoPlay
         />
         <div>
-          <ul>
-            <li>
+            <p>
               Resolution: {this.state.trackInfo.width}x{this.state.trackInfo.height}
-            </li>
-            <li>Bitrate: {this.state.trackInfo.bitrate} kbps</li>
-          </ul>
+            </p>
+            <p>Bitrate: {this.state.trackInfo.bitrate} kbps</p>
         </div>
       </div>
     );

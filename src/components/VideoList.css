@@ -1,4 +1,7 @@
 .container {
-  flex: 2;
-  background: blue;
+  flex: 1;
+  background: white;
+}
+.list{
+  padding: 0;
 }
