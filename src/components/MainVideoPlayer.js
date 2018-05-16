@@ -7,7 +7,7 @@ let mainVideo;
 let player;
 
 class MainVideoPlayer extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     console.log(mainVideo);
@@ -15,20 +15,28 @@ class MainVideoPlayer extends Component {
       trackInfo: {
         width: 0,
         height: 0,
-        bitrate: 0
-      }
+        bitrate: 0,
+        bandwidth: 0,
+        videoCodec: '',
+        language: '',
+        framerate: 0,
+        mimeType: '',
+        audioCodec: '',
+        audioBandwidth: ''
+      },
+      audios: [],
+      texts: []
     };
   }
- 
-  componentDidUpdate(prevProps){
+
+  componentDidUpdate(prevProps) {
     if (prevProps.currentVideo !== this.props.currentVideo) {
-        this.loadPlayer(this.props.currentVideo.mpd);
+      this.loadPlayer(this.props.currentVideo.mpd);
     }
-}
+  }
 
   componentDidMount() {
     // Fill in the language preferences based on browser config, if available.
-    let language = navigator.language || 'en-us';
 
     // Install built-in polyfills to patch browser incompatibilities.
     shaka.polyfill.installAll();
@@ -49,44 +57,24 @@ class MainVideoPlayer extends Component {
     player.addEventListener('error', this.onErrorEvent);
     player.addEventListener('adaptation', this.onAdaptationEvent);
 
-
     this.loadPlayer(this.props.currentVideo.mpd);
-
   }
   loadPlayer(mpd) {
-    if (!player) return
+    if (!player) return;
     // Try to load a manifest.
     // This is an asynchronous process.
     player
       .load(mpd)
       .then(() => {
-        var tracks = player.getVariantTracks();
-        var activeTrack;
+        this._getTrackInfo(player);
+        let audios = player.getAudioLanguages();
+        let texts = player.getTextLanguages();
 
-        // Add track info to the DOM.
-        for (var i = 0; i < tracks.length; ++i) {
-          var track = tracks[i];
-          if (track.active) activeTrack = track;
-          this.setState({
-            trackInfo: {
-              width: track.width,
-              height: track.height,
-              bitrate: (track.bandwidth / 1024).toFixed(0)
-            }
-          });
+        this.setState({
+          audios: audios,
+          texts: texts
+        });
 
-          // var li = document.createElement('li');
-          // li.textContent = text;
-          // ul.appendChild(li);
-        }
-
-        // Correct aspect ratio.
-        if (activeTrack) {
-          var aspectRatio = activeTrack.width / activeTrack.height;
-          this.ref.video.width = this.ref.video.height * aspectRatio;
-        } else {
-          console.error('Unable to query aspect ratio!');
-        }
         // This runs if the asynchronous load is successful.
         console.log('The video has now been loaded!');
       })
@@ -100,7 +88,7 @@ class MainVideoPlayer extends Component {
 
   onAdaptationEvent(event) {
     // Extract the shaka.util.Error object from the event.
-    // this.onError(event.detail);
+    this._getTrackInfo(player);
   }
 
   onError(error) {
@@ -108,12 +96,60 @@ class MainVideoPlayer extends Component {
     console.error('Error code', error.code, 'object', error);
   }
 
+  _getTrackInfo(player) {
+    var tracks = player.getVariantTracks();
+    var activeTrack;
+
+    // Add track info to the DOM.
+    for (var i = 0; i < tracks.length; ++i) {
+      var track = tracks[i];
+      if (track.active) activeTrack = track;
+      console.log(track);
+      
+    }
+    this.setState({
+      trackInfo: {
+        width: activeTrack.width,
+        height: activeTrack.height,
+        bitrate: (activeTrack.bandwidth / 1024).toFixed(0),
+        bandwidth: activeTrack.bandwidth,
+        videoCodec: activeTrack.videoCodec,
+        audioCodec: activeTrack.audioCodec,
+        language: activeTrack.language,
+        framerate: activeTrack.frameRate,
+        mimeType: activeTrack.mimeType,
+        audioBandwidth: activeTrack.audioBandwidth
+      }
+    });
+
+    // Correct aspect ratio.
+    if (activeTrack) {
+      var aspectRatio = activeTrack.width / activeTrack.height;
+      // this.ref.video.width = this.ref.video.height * aspectRatio;
+    } else {
+      console.error('Unable to query aspect ratio!');
+    }
+  }
+
   componentWillUnmount() {
     // unmount stuff
     // kill stream hogging...:)
+    player.unload();
   }
 
   render() {
+    let audioSelector = this.state.audios.map(item => (
+      <option key={item} value={item}>
+        {item}
+      </option>
+    ));
+
+    let textSelector = this.state.texts.map(item => (
+      <option key={item} value={item}>
+        {item}
+      </option>
+    ));
+
     return (
       <div className={styles.container}>
         <h2>Player</h2>
@@ -123,11 +159,55 @@ class MainVideoPlayer extends Component {
           controls
           // autoPlay
         />
+        <table>
+          <tbody>
+            <tr>
+              <td> Resolution </td>
+              <td>
+                {this.state.trackInfo.width}x{this.state.trackInfo.height}
+              </td>
+            </tr>
+            <tr>
+              <td> Bandwidth </td>
+              <td>{this.state.trackInfo.bandwidth}</td>
+            </tr>
+            <tr>
+              <td> Bitrate </td>
+              <td>{this.state.trackInfo.bitrate} kbps</td>
+            </tr>
+            <tr>
+              <td> Framerate </td>
+              <td>{this.state.trackInfo.framerate}</td>
+            </tr>
+            <tr>
+              <td>Video Codec </td>
+              <td>{this.state.trackInfo.videoCodec}</td>
+            </tr>
+            <tr>
+              <td>Audio Codec </td>
+              <td>{this.state.trackInfo.audioCodec}</td>
+            </tr>
+            <tr>
+              <td>Audio Bandwidth </td>
+              <td>{this.state.trackInfo.audioBandwidth}</td>
+            </tr>
+            <tr>
+              <td> Language </td>
+              <td>{this.state.trackInfo.language}</td>
+            </tr>
+            <tr>
+              <td> Mime Type </td>
+              <td>{this.state.trackInfo.mimeType}</td>
+            </tr>
+          </tbody>
+        </table>
+
         <div>
-            <p>
-              Resolution: {this.state.trackInfo.width}x{this.state.trackInfo.height}
-            </p>
-            <p>Bitrate: {this.state.trackInfo.bitrate} kbps</p>
+          <select>{audioSelector}</select>
+        </div>
+
+        <div>
+          <select>{textSelector}</select>
         </div>
       </div>
     );
