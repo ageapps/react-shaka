@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styles from './VideoListItem.css';
-import { Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
+import { Card } from 'reactstrap';
   
 class VideoListItem extends Component {
   render() {

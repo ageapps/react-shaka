@@ -3,12 +3,12 @@ import VideoListItem from './VideoListItem';
 import styles from './VideoList.css';
 
 let videos;
-let currentVideo;
+// let currentVideo;
 
 class VideoList extends Component {
   constructor(props){
     super(props);
-    currentVideo = props.currentVideo;
+    // currentVideo = props.currentVideo;
     // videos = props.videos.filter((video => video.id !== currentVideo));
     videos = props.videos;
   }

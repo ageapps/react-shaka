@@ -9,6 +9,7 @@ class App extends Component {
       <div className={styles.App}>
         <header className={styles.header}>
           <h1 className={styles.title}>Welcome to a Shaka-Player demo built with React</h1>
+          <a className={styles.link} href="https://github.com/ageapps/react-shaka"> <img alt="" src="https://wordeology.com/images/github-logo.png" /></a>
         </header>
         <Body/>
         {/* <p className="App-intro">

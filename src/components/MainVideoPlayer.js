@@ -4,7 +4,7 @@ import { Button, Table, FormGroup, Label, Input, InputGroup, InputGroupAddon } f
 import styles from './MainVideoPlayer.css';
 
 // var manifestUri = '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-let mainVideo;
+// let mainVideo;
 let player;
 
 class MainVideoPlayer extends Component {
@@ -120,7 +120,7 @@ class MainVideoPlayer extends Component {
 
     // Correct aspect ratio.
     if (activeTrack) {
-      var aspectRatio = activeTrack.width / activeTrack.height;
+      // var aspectRatio = activeTrack.width / activeTrack.height;
       // this.ref.video.width = this.ref.video.height * aspectRatio;
     } else {
       console.error('Unable to query aspect ratio!');
@@ -145,7 +145,7 @@ class MainVideoPlayer extends Component {
     for (var i = 0; i < tracks.length; ++i) {
       var track = tracks[i];
 
-      if (track.id === parseInt(this.trackSelectorRef.current.value)) {
+      if (track.id === parseInt(this.trackSelectorRef.current.value,10)) {
         player.selectVariantTrack(track, true);
       }
     }
@@ -187,7 +187,7 @@ class MainVideoPlayer extends Component {
           <h1>Track selection</h1>
           <InputGroup className={styles.input}>
             <InputGroupAddon addonType="prepend"><Button onClick={(e) => this.onSubmit(e)}>Load</Button></InputGroupAddon>
-            <Input onChange={e => this.handleChange(e)}/>
+            <Input onChange={e => this.handleChange(e)} placeholder="Introduce custom .mpd file URL"/>
           </InputGroup>
           {/* <div>
             <select ref={this.trackSelectorRef}>{trackSelector}</select>
